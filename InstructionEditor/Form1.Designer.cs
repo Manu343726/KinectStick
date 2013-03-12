@@ -31,8 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.deleteInstructionButton = new System.Windows.Forms.Button();
             this.newInstructionButton = new System.Windows.Forms.Button();
             this.profileList = new System.Windows.Forms.ListView();
@@ -78,40 +76,23 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button4);
-            this.groupBox1.Controls.Add(this.button3);
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.deleteInstructionButton);
             this.groupBox1.Controls.Add(this.newInstructionButton);
             this.groupBox1.Controls.Add(this.profileList);
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(679, 434);
+            this.groupBox1.Size = new System.Drawing.Size(686, 434);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Prefil 1 (Edición)";
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(564, 288);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(110, 21);
-            this.button4.TabIndex = 8;
-            this.button4.Text = "Probar perfil...";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(469, 288);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(89, 21);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "Probar";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
             // deleteInstructionButton
             // 
-            this.deleteInstructionButton.Location = new System.Drawing.Point(469, 46);
+            this.deleteInstructionButton.Location = new System.Drawing.Point(476, 46);
             this.deleteInstructionButton.Name = "deleteInstructionButton";
             this.deleteInstructionButton.Size = new System.Drawing.Size(125, 21);
             this.deleteInstructionButton.TabIndex = 6;
@@ -121,7 +102,7 @@
             // 
             // newInstructionButton
             // 
-            this.newInstructionButton.Location = new System.Drawing.Point(469, 19);
+            this.newInstructionButton.Location = new System.Drawing.Point(476, 19);
             this.newInstructionButton.Name = "newInstructionButton";
             this.newInstructionButton.Size = new System.Drawing.Size(125, 21);
             this.newInstructionButton.TabIndex = 5;
@@ -131,6 +112,8 @@
             // 
             // profileList
             // 
+            this.profileList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.profileList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.instructionHeader,
             this.commandTypeHeader,
@@ -138,10 +121,11 @@
             this.valueHeader});
             this.profileList.FullRowSelect = true;
             this.profileList.GridLines = true;
+            this.profileList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.profileList.HideSelection = false;
             this.profileList.Location = new System.Drawing.Point(6, 19);
             this.profileList.Name = "profileList";
-            this.profileList.Size = new System.Drawing.Size(457, 290);
+            this.profileList.Size = new System.Drawing.Size(464, 290);
             this.profileList.TabIndex = 4;
             this.profileList.UseCompatibleStateImageBehavior = false;
             this.profileList.View = System.Windows.Forms.View.Details;
@@ -165,10 +149,11 @@
             // valueHeader
             // 
             this.valueHeader.Text = "Valor/Modificadores";
-            this.valueHeader.Width = 107;
+            this.valueHeader.Width = 112;
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox2.Controls.Add(this.shiftCheckBox);
             this.groupBox2.Controls.Add(this.controlCheckBox);
             this.groupBox2.Controls.Add(this.joystickValuePercentLabel);
@@ -292,7 +277,7 @@
             this.statusLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 460);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(695, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(702, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -309,7 +294,7 @@
             this.perfilToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(695, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(702, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -383,7 +368,7 @@
             // compilarToolStripMenuItem
             // 
             this.compilarToolStripMenuItem.Name = "compilarToolStripMenuItem";
-            this.compilarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.compilarToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.compilarToolStripMenuItem.Text = "Compilar...";
             this.compilarToolStripMenuItem.Click += new System.EventHandler(this.compilarToolStripMenuItem_Click);
             // 
@@ -411,12 +396,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(695, 482);
+            this.ClientSize = new System.Drawing.Size(702, 482);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(718, 520);
             this.Name = "Form1";
             this.Text = "KinectStick - Editor de perfiles";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
@@ -436,8 +422,6 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button deleteInstructionButton;
         private System.Windows.Forms.Button newInstructionButton;
         private System.Windows.Forms.ListView profileList;

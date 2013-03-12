@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 using KinectStick.Commands;
 using KinectStick;
-using WindowsInput;
+using WindowsInput.Native;
 
 namespace InstructionEditor
 {
@@ -617,19 +617,32 @@ namespace InstructionEditor
                 if (compiledProfile == null)
                 {
                     compiledProfile = ProfileCompiler.Compile(profile);
-                    kinectStick = new KinectStickEngine(compiledProfile);
 
-                    kinectStick.RecognizedInstruction += OnRecognizedInstruction;
-                    kinectStick.RejectedInstruction += OnRejectedInstruction;
-                    kinectStick.RecognizedPhrase += OnRecognizedPhrase;
+                    if (compiledProfile != null)
+                    {
+                        kinectStick = new KinectStickEngine(compiledProfile);
+
+                        kinectStick.RecognizedInstruction += OnRecognizedInstruction;
+                        kinectStick.RejectedInstruction += OnRejectedInstruction;
+                        kinectStick.RecognizedPhrase += OnRecognizedPhrase;
+                    }
+                    else
+                        MessageBox.Show("Error al compilar el perfil", "KinectStick - Compilación", MessageBoxButtons.OK, MessageBoxIcon.Error);        
                 }
                 else
                 {
                     compiledProfile = ProfileCompiler.Compile(profile);
-                    kinectStick.SetProfile(compiledProfile);
+
+                    if (compiledProfile != null)
+                        kinectStick.SetProfile(compiledProfile);
+                    else
+                        MessageBox.Show("Error al compilar el perfil", "KinectStick - Compilación", MessageBoxButtons.OK, MessageBoxIcon.Error);         
                 }
 
-                MessageBox.Show("Perfil compilado correctamente","KinectStick - Compilación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if(!kinectStick.Ready)
+                    MessageBox.Show("Error al configurar el engine: Error de conexión con Kinect o fallo en la carga del motor de reconocimiento de voz", "KinectStick - Compilación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    MessageBox.Show("Perfil compilado correctamente", "KinectStick - Compilación", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
                 compilarToolStripMenuItem.Enabled = false;
@@ -643,11 +656,13 @@ namespace InstructionEditor
         private void OnRecognizedInstruction(String instructionPhrase, CompiledSpeechPhrase lastPhrase, Command command)
         {
             notify.ShowBalloonTip(3000, "KinectStick - Instrucción reconocida", "'" + instructionPhrase + "'", ToolTipIcon.Info);
+            System.Media.SystemSounds.Beep.Play();
         }
 
         private void OnRejectedInstruction(String instructionPhrase, CompiledSpeechPhrase lastPhrase, Command command)
         {
             notify.ShowBalloonTip(3000, "KinectStick - Instrucción descartada", "'" + instructionPhrase + "'", ToolTipIcon.Error);
+            System.Media.SystemSounds.Exclamation.Play();
         }
 
         private void timer1_Tick(object sender, EventArgs e)

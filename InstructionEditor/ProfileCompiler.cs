@@ -10,7 +10,7 @@ using KinectStick.Commands;
 
 using System.Collections;
 using System.Windows.Forms;
-using WindowsInput;
+using WindowsInput.Native;
 
 namespace InstructionEditor
 {

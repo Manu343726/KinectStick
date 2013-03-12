@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 using System.Windows.Forms;
 using vJoyWrapper;
@@ -29,6 +30,7 @@ namespace KinectStick
         private List<CompiledSpeechPhrase> instructionQueue;
         //OUT:
         private VJoyWrapper joy;
+        private InputSimulator inputSimulator;
         //-------------------------------------------
 
         public delegate void InstructionPipelineEvent(String instructionPhrase, CompiledSpeechPhrase lastPhrase, Command command);
@@ -46,6 +48,7 @@ namespace KinectStick
             actualNode = null;
             instructionQueue = new List<CompiledSpeechPhrase>();
             joy = new VJoyWrapper();
+            inputSimulator = new InputSimulator();
             this.profile = profile;
 
             ready = InitKinect() && LoadSpeechRecognitionEngine();
@@ -55,7 +58,10 @@ namespace KinectStick
         {
             this.profile = profile;
             ResetInstructionPipeline();
-            LoadSpeechRecognitionEngine();
+            if (kinect != null)
+                ready = LoadSpeechRecognitionEngine();
+            else
+                ready = false;
         }
 
         private bool InitKinect()
@@ -97,7 +103,7 @@ namespace KinectStick
             {
                 string value;
                 recognizer.AdditionalInfo.TryGetValue("Kinect", out value);
-                if ("True".Equals(value, StringComparison.OrdinalIgnoreCase) && "en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))
+                if ("True".Equals(value, StringComparison.OrdinalIgnoreCase) && "es-ES".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     info = recognizer;
                     break;
@@ -227,13 +233,13 @@ namespace KinectStick
                 switch (command.keydata.type)
                 {
                     case KeyboardCommandType.PRESS:
-                        InputSimulator.SimulateKeyPress(command.keydata.key);
+                        inputSimulator.Keyboard.KeyPress(command.keydata.key);
                         break;
                     case KeyboardCommandType.HOLD:
-                        InputSimulator.SimulateKeyDown(command.keydata.key);
+                        inputSimulator.Keyboard.KeyDown(command.keydata.key);
                         break;
                     case KeyboardCommandType.RELEASE:
-                        InputSimulator.SimulateKeyUp(command.keydata.key);
+                        inputSimulator.Keyboard.KeyUp(command.keydata.key);
                         break;
                 }
             }
@@ -268,10 +274,45 @@ namespace KinectStick
         }
 
         //Eventos del sistema de reconocimiento de voz:
-        private void SpeechFraseRecognized(object sender, SpeechRecognizedEventArgs args)
+        private void SpeechFraseRecognized(object sender, SpeechRecognizedEventArgs e)
         {
-            LaunchRecognizedEvent(profile.phraseLibrary[(int)args.Result.Semantics.Value]);
-            InstructionFetch((int)args.Result.Semantics.Value);
-        }
+            // Add event handler code here.
+
+            // The following code illustrates some of the information available
+            // in the recognition result.
+            Debug.WriteLine("Grammar({0}), {1}: {2} (Confidence: {3})",
+              e.Result.Grammar.Name, e.Result.Audio.Duration, e.Result.Text,e.Result.Confidence);
+
+            // Display the semantic values in the recognition result.
+            foreach (KeyValuePair<String, SemanticValue> child in e.Result.Semantics)
+            {
+                Debug.WriteLine(" {0} key: {1}",
+                  child.Key, child.Value.Value ?? "null");
+            }
+            Console.WriteLine();
+
+            // Display information about the words in the recognition result.
+            foreach (RecognizedWordUnit word in e.Result.Words)
+            {
+                RecognizedAudio audio = e.Result.Audio;
+                Debug.WriteLine(" {0,-10} {1,-10} {2,-10} {3} ({4})",
+                  word.Text, word.LexicalForm, word.Pronunciation,
+                  audio.Duration, word.DisplayAttributes);
+            }
+
+            // Display the recognition alternates for the result.
+            foreach (RecognizedPhrase phrase in e.Result.Alternates)
+            {
+                Debug.WriteLine(" alt({0}) {1}", phrase.Confidence, phrase.Text);
+            }
+
+            if (e.Result.Confidence > 0.8)
+            {
+                LaunchRecognizedEvent(profile.phraseLibrary[(int)e.Result.Semantics.Value]);
+                InstructionFetch((int)e.Result.Semantics.Value);
+            }
+            else
+                LaunchRejectEvent(new CompiledSpeechPhrase(e.Result.Text, -1));
+            }
     }
 }
